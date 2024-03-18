@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hello.springmvc.jar.basic.HelloData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +78,31 @@ public class RequestParamController {
 	@RequestMapping("/request-param-map")
 	public String requestParamMap(@RequestParam Map<String, Object> paramMap) { // 모든 요청 파라미터를 Map으로 받는다.
 		log.info("name = {}, age = {}", paramMap.get("username"), paramMap.get("age"));
+		return "ok";
+	}
+
+	@ResponseBody
+	@RequestMapping("/model-attribute-v0")
+	public String modelAttributeV0(@RequestParam String username, @RequestParam int age) {
+		HelloData helloData = new HelloData();
+		helloData.setUsername(username);
+		helloData.setAge(age);
+
+		log.info("helloDate = {}", helloData); // Data 애노테이션의 toString() 동작
+		return "ok";
+	}
+
+	@ResponseBody
+	@RequestMapping("/model-attribute-v1")
+	public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+		log.info("helloDate = {}", helloData); // Data 애노테이션의 toString() 동작
+		return "ok";
+	}
+
+	@ResponseBody
+	@RequestMapping("/model-attribute-v2")
+	public String modelAttributeV2(HelloData helloData) { // @ModelAttribute 애노테이션은 생략할 수 있다.
+		log.info("helloDate = {}", helloData);
 		return "ok";
 	}
 }
